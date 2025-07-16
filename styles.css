@@ -1,8 +1,40 @@
+@font-face {
+    font-family: 'Google Sans';
+    src: url('GoogleSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Google Sans';
+    src: url('GoogleSans-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Google Sans';
+    src: url('GoogleSans-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Google Sans', sans-serif;
+}
+
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: -1;
 }
 
 body {
@@ -37,7 +69,7 @@ body.dark-theme {
         rgba(0, 2, 12, 1) 100%
     );
     background-size: 150% 150%;
-    animation: gradientAnimation 40s ease-in-out infinite;
+    animation: gradientAnimation 120s linear infinite;
     color: #ffffff;
 }
 
@@ -67,7 +99,7 @@ body.light-theme {
         rgba(210, 230, 255, 1) 100%
     );
     background-size: 150% 150%;
-    animation: gradientAnimation 40s ease-in-out infinite;
+    animation: gradientAnimation 120s linear infinite;
     color: #1a1a1a;
 }
 
@@ -320,8 +352,6 @@ body.light-theme .projects-title {
                  0 0 20px rgba(25, 118, 210, 0.1),
                  0 0 30px rgba(25, 118, 210, 0.1);
 }
-
-
 
 @keyframes titleGlow {
     0%, 100% {
@@ -823,8 +853,9 @@ footer {
 
 .shape {
     position: absolute;
-    backdrop-filter: blur(2px);
-    animation: morphShape 20s ease-in-out infinite, floatAndRotate 15s ease-in-out infinite, gradientShift 10s ease-in-out infinite;
+    will-change: transform;
+    border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
+    animation: floatAndRotate 60s linear infinite;
 }
 
 body.dark-theme .shape {
@@ -936,25 +967,6 @@ body.light-theme .shape::before {
 }
 
 /* Animations */
-@keyframes morphShape {
-    0%, 100% {
-        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-        transform: scale(1);
-    }
-    25% {
-        border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%;
-        transform: scale(1.05);
-    }
-    50% {
-        border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%;
-        transform: scale(1);
-    }
-    75% {
-        border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%;
-        transform: scale(0.95);
-    }
-}
-
 @keyframes floatAndRotate {
     0%, 100% {
         transform: translate(0, 0) rotate(0deg);
@@ -967,17 +979,6 @@ body.light-theme .shape::before {
     }
     75% {
         transform: translate(-15px, -15px) rotate(-5deg);
-    }
-}
-
-@keyframes gradientShift {
-    0%, 100% {
-        background-position: 0% 50%;
-        opacity: 0.5;
-    }
-    50% {
-        background-position: 100% 50%;
-        opacity: 0.8;
     }
 }
 
@@ -1325,4 +1326,73 @@ body.light-theme .profile-subtitle {
     text-shadow: 0 0 10px rgba(25, 118, 210, 0.2),
                  0 0 20px rgba(25, 118, 210, 0.1),
                  0 0 30px rgba(25, 118, 210, 0.1);
+}
+
+.effects-toggle {
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+}
+
+body.dark-theme .effects-toggle {
+    background: rgba(14, 22, 39, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+body.light-theme .effects-toggle {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #1a1a1a;
+}
+
+body.no-effects *,
+body.no-effects ::before,
+body.no-effects ::after {
+    animation: none !important;
+    transition: none !important;
+}
+
+body.no-effects {
+    background-size: cover !important; /* freeze gradient */
+}
+
+/* Respect user OS setting to reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+} 
+
+/* Баннер внизу страницы */
+.banner-container {
+    width: 100%;
+    margin-top: 40px; /* небольшой отступ сверху */
+    background: rgba(0, 0, 0, 0.5); /* полупрозрачный фон */
+    display: flex;
+    justify-content: center; /* элементы по центру */
+    align-items: center;
+    padding: 8px 32px; /* 32px слева и справа */
+}
+
+.banner-container video {
+    height: 60px; /* компактный размер */
+    width: auto;
+    max-width: 100%;
+    display: block;
+    margin-right: 24px; /* расстояние до текста */
+}
+
+/* Текст внутри баннера */
+.banner-text {
+    color: #bbbbbb;
+    font-size: 16px;
+    font-family: 'Google Sans', sans-serif;
+    text-decoration: none;
 } 

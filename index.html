@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sabmor</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preload" href="GoogleSans-Regular.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="GoogleSans-Medium.ttf" as="font" type="font/ttf" crossorigin>
+    <link rel="preload" href="GoogleSans-Bold.ttf" as="font" type="font/ttf" crossorigin>
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@7/dist/pixi.min.js" defer></script>
 </head>
 <body class="dark-theme">
     <div class="settings-panel">
@@ -15,25 +18,7 @@
         </button>
         <button class="lang-toggle" aria-label="Toggle language">RU</button>
     </div>
-    <div class="background-decoration">
-        <!-- Large shapes -->
-        <div class="shape large"></div>
-        <div class="shape large"></div>
-        
-        <!-- Medium shapes -->
-        <div class="shape medium"></div>
-        <div class="shape medium"></div>
-        
-        <!-- Small shapes -->
-        <div class="shape small"></div>
-        <div class="shape small"></div>
-        <div class="shape small"></div>
-        
-        <!-- Tiny shapes -->
-        <div class="shape tiny"></div>
-        <div class="shape tiny"></div>
-        <div class="shape tiny"></div>
-    </div>
+    <canvas id="bg-canvas"></canvas>
 
     <div class="container">
         <section class="profile-section">
@@ -61,7 +46,7 @@
                             <span class="tech-tag">Posting</span>
                         </div>
                     </div>
-                    <img src="https://cdn4.cdn-telegram.org/file/cbny7xwVM5FHPTUJD9nSSwYhvExx7mCe2HaHLpN_KsXzUOVY09QLJBbUX_t99I7_9n8EwR5wd09Xtg-8_IP8ua1ETPR1apNGR1_vLWO1_JhM10zYDUqbd2sr846X_rU-sxR3sgyjEQdtZfqEeLWg0NZ99WFWr_zR6hBmX9SPq4qaogHolFbyzIogoZn-HvFDgXN7tiB7nEg9MMu-iecSHnlDh0RrtHpaGPPWBJPqa8eQ0vUBxtclR_JcdZ_L7sFY6ccpnCCFDuQPuuVqroyZTMFD1LOapYBqXlOTZoihXzYyWGMcvxxmGHVFP_-9ptPFkxSuL66XLiy_OSh4keoKAQ.jpg" alt="Furry Datamines">
+                    <img src="assets/furrydatamines.jpg" alt="Furry Datamines" loading="lazy">
                 </div>
                 <div class="project-card" onclick="window.location.href='https://t.me/sabplugins'">
                     <div class="project-content">
@@ -73,103 +58,16 @@
                             <span class="tech-tag exteragram">EXTERAGRAM</span>
                         </div>
                     </div>
-                    <img src="https://cdn4.cdn-telegram.org/file/F5OHwM8m7oxTZIv0SWTu6zkI469BLSpX1ldiUHZHjotSzk5rCCIilgp_iAzJmyQx6H5PhXOcMrju6Fkt6UP0595UollLwOSyASvYBihQjorWLb7Xg4vzLav2HN1xm1IhG9fLPnZ9PjtCdKkjSxRAnGQOZqE-nBCOOQJTLuMJNjRqU3ELJRPbaPghHOjDb5anfC1bKBYa_3Z35akn7AyNBm0ITfid3Hti7FAZ2Quy30hLu1uBx9-dNR7MEKKnLWXBPt_oWgDebiSaLGYdlbDaAjLSfw_qgpbxYei0GCSPCZnmbOnFWINhAOZexhFJ7meOA4TKwki27I8EMrSIuYkcMw.jpg" alt="SabPlugins">
+                    <img src="assets/sabplugins.jpg" alt="SabPlugins" loading="lazy">
                 </div>
             </div>
         </section>
     </div>
 
-    <script>
-        // Initialize language first
-        const langToggle = document.querySelector('.lang-toggle');
-        const translations = {
-            en: {
-                projects: 'Active Projects',
-                viewProject: 'View Project →',
-                telegram: 'telegram',
-                tgChannel: 'tg blog',
-                discord: 'discord',
-                themeDark: 'dark',
-                themeLight: 'light'
-            },
-            ru: {
-                projects: 'Активные проекты',
-                viewProject: 'Открыть проект →',
-                telegram: 'телеграм',
-                tgChannel: 'тг блог',
-                discord: 'дискорд',
-                themeDark: 'темная',
-                themeLight: 'светлая'
-            }
-        };
-
-        // Theme switching
-        const themeToggle = document.querySelector('.theme-toggle');
-        const themeIcon = document.querySelector('.theme-icon');
-        const themeText = document.querySelector('.theme-text');
-        const body = document.body;
-        
-        function updateThemeUI(isLight) {
-            themeIcon.textContent = isLight ? '🌞' : '🌙';
-            themeText.textContent = translations[currentLang][isLight ? 'themeLight' : 'themeDark'];
-        }
-
-        themeToggle.addEventListener('click', () => {
-            const isLight = !body.classList.contains('light-theme');
-            body.classList.toggle('light-theme');
-            body.classList.toggle('dark-theme');
-            updateThemeUI(isLight);
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        });
-
-        let currentLang = localStorage.getItem('lang') || 'ru'; // Default to Russian
-
-        function updateLanguage() {
-            // Update projects title
-            document.querySelector('.projects-title').textContent = translations[currentLang].projects;
-            
-            // Update project links
-            document.querySelectorAll('.project-link').forEach(link => {
-                link.textContent = translations[currentLang].viewProject;
-            });
-
-            // Update social links
-            document.querySelector('.telegram').textContent = translations[currentLang].telegram;
-            document.querySelector('.tg-channel').textContent = translations[currentLang].tgChannel;
-            document.querySelector('.discord').textContent = translations[currentLang].discord;
-
-            // Update project descriptions
-            document.querySelectorAll('.project-description[data-en][data-ru]').forEach(desc => {
-                desc.innerHTML = desc.getAttribute(`data-${currentLang}`);
-            });
-
-            // Update theme text
-            themeText.textContent = translations[currentLang][body.classList.contains('light-theme') ? 'themeLight' : 'themeDark'];
-        }
-
-        langToggle.addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'ru' : 'en';
-            langToggle.textContent = currentLang.toUpperCase();
-            localStorage.setItem('lang', currentLang);
-            updateLanguage();
-        });
-
-        // Initial setup
-        document.addEventListener('DOMContentLoaded', () => {
-            // Load saved theme
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'light') {
-                body.classList.remove('dark-theme');
-                body.classList.add('light-theme');
-                updateThemeUI(true);
-            } else {
-                updateThemeUI(false);
-            }
-
-            // Load saved language
-            langToggle.textContent = currentLang.toUpperCase();
-            updateLanguage();
-        });
-    </script>
+    <script src="app.js" defer></script>
+    <div class="banner-container">
+        <video src="assets/banner.mp4" autoplay loop muted playsinline></video>
+        <a class="banner-text" href="https://github.com/Sasmor111/sabru" target="_blank" rel="noopener">by @SabmorXD никакие права не защищены пиздите сайт если хотите</a>
+    </div>
 </body>
 </html> 
